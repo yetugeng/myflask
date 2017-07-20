@@ -9,7 +9,7 @@ class LoginForm(Form):
     remember_me = BooleanField('Remember_me', default=False)
     sbumit = SubmitField('Log in')
 
-class SignUpForm(Form)
+class SignUpForm(Form):
     user_name = TextField('user name',validators=[Required(),Length(max=15)])
     user_email = TextField('user email',validators=[Required(),Length(max=15)])
     submit = SubmitField('Sign up')
