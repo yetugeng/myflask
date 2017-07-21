@@ -2,11 +2,11 @@
 import datetime
 
 from flask import render_template, flash, redirect, session, url_for, request, g
-from flask.ext.login import login_user, logout_user, current_user, login_required
+from flask_login import login_user, logout_user, current_user, login_required
 
 from models import User, Post, ROLE_USER, ROLE_ADMIN
 from app import app, db, lm
-from forms import LoginForm, SignUpForm
+from .forms import LoginForm, SignUpForm
 
 @lm.user_loader
 def load_user(user_id):
@@ -36,8 +36,8 @@ def login():
     if current_user.is_authenticated:
         return redirect('index')
     # 注册验证
-    form = LoginForm()
-    if form.validate_on_submit():
+    form = LoginForm()  # 生成form实例，给render_template渲染使用
+    if form.validate_on_submit():  #调用form实例里面的validate_on_submit()功能，验证数据是否安全，如是返回True，默认返回False
         user = User.login_check(request.form.get('user_name'))
         if user:
             login_user(user)
@@ -49,7 +49,9 @@ def login():
             except:
                 flash("The Database error!")
                 return redirect('/login')
-            flash('Your name:' + request.form.get('user_name'))
+            flash('Your name:' + request.form.get('user_name'))     # flash - Flashes a message to the next request.
+                                                                    # 闪现的消息将不会自动地出现在我们的页面上，我们的模板需要加入展示消息的内容。
+                                                                    # 我们将添加这些消息到我们的基础模板中，这样所有的模板都能继承这个函数。
             flash('remember me?' + str(request.form.get('remember_me')))
             return redirect(url_for("users", user_id=current_user.id))
         else:
@@ -91,4 +93,4 @@ def sign_up():
             flash("Sign up Successful!")
             return redirect('/index')
 
-    return render_template("sign_up.html,form=form")
+    return render_template("sign_up.html",form=form)

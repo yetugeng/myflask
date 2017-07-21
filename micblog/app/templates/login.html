@@ -1,17 +1,16 @@
-<!-- 包含生成表单的 HTML 的模板-->
-<! -- extend form base layout -->
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Sign Up</h1>
+<h1>Sign In</h1>
 <form action="/login" method="post" name="login">
-    {{ form.hidden_tag() }}
-    <p>Please enter your Name:<br></p>
-    {% for error in form.errors.user_name %}
-    <p style="color: red;">[-] {{ error }}</p>
-    {% endfor %}<br>
+   {{ form.hidden_tag() }}
+   <p>Please enter your name: {{ form.user_name(size=80) }}</p>  <!-- 通过views.py里return render_template来渲染这个变量，form实例里面的openid属性(长度80)-->
+   {% for error in form.errors.user_name %} <!--  #捕捉openid这个实例的errors信息,但是也有这样的写法：form.user_name.errors，对？？？ -->
+   <p style="color:red;">[-] {{ error }}</p>
+   {% endfor %}
 
-    <p> Remember Me? {{form.remember_me}}</p>
-    <p>{{ from.submit }}</p>
+   <p>remember me? {{ form.remember_me }}</p>   <!--#通过views.py里面render_template来渲染变量，form实例里面的remember_me属性，勾选框-->
+   <p>{{ form.submit }}</p>
+
 </form>
 {% endblock %}
